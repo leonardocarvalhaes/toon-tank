@@ -21,7 +21,8 @@ void APawnTank::BeginPlay()
 void APawnTank::HandleDestruction()
 {
 	Super::HandleDestruction();
-	// Do something
+
+	Destroy();
 }
 
 // Called every frame
