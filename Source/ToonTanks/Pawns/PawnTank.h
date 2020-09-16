@@ -26,6 +26,7 @@ private:
 	float RotationSpeed = 250.f;
 
 	APlayerController* PlayerController;
+	bool bIsPlayerAlive = true;
 
 	FVector MoveDirection;
 	FQuat RotationDirection;
@@ -43,6 +44,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void HandleDestruction() override;
+
+	bool GetIsPlayerAlive();
 
 protected:
 	virtual void BeginPlay() override;

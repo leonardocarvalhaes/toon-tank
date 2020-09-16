@@ -1,4 +1,5 @@
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "ProjectileBase.h"
 
@@ -14,6 +15,9 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = MovementSpeed;
 	ProjectileMovement->MaxSpeed = MovementSpeed;
 
+	ParticleTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle Trail"));
+	ParticleTrail->SetupAttachment(RootComponent);
+
 	InitialLifeSpan = 3.f;
 }
 
@@ -21,22 +25,21 @@ void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation(), FRotator(), 0.2f);
 }
 
 void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Running OnHit..."));
-
 	AActor* MyOwner = GetOwner();
 
 	if(!MyOwner) return;
 
 	if(OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation());
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, DamageType);
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation(), FRotator(), 0.2f);
+
+		Destroy();
 	}
-
-	// Run effects and animations here
-
-	Destroy();
 }
