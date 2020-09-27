@@ -6,6 +6,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UCameraShake;
 
 UCLASS()
 class TOONTANKS_API APawnTank : public APawnBase
@@ -25,6 +26,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	float RotationSpeed = 250.f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	TSubclassOf<UCameraShake> ExplosionShake;
+
 	APlayerController* PlayerController;
 	bool bIsPlayerAlive = true;
 
@@ -34,6 +38,7 @@ private:
 	void CalculateMoveInput(float Value);
 	void CalculateRotateInput(float Value);
 
+	void Fire();
 	void Move();
 	void Rotate();
 

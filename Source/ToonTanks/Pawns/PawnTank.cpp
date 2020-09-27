@@ -24,6 +24,7 @@ void APawnTank::HandleDestruction()
 
 	bIsPlayerAlive = false;
 
+	GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(ExplosionShake);
 	SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
 }
@@ -33,25 +34,26 @@ bool APawnTank::GetIsPlayerAlive()
 	return bIsPlayerAlive;
 }
 
-// Called every frame
 void APawnTank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Move();
-	Rotate();
-
-	if(PlayerController)
+	if(GetIsPlayerAlive())
 	{
-		FHitResult TraceHitResult;
-		PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, TraceHitResult);
-		FVector HitLocation = TraceHitResult.ImpactPoint;
+		Move();
+		Rotate();
 
-		RotateTurret(HitLocation);
+		if(PlayerController)
+		{
+			FHitResult TraceHitResult;
+			PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, TraceHitResult);
+			FVector HitLocation = TraceHitResult.ImpactPoint;
+
+			RotateTurret(HitLocation);
+		}
 	}
 }
 
-// Called to bind functionality to input
 void APawnTank::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -71,6 +73,11 @@ void APawnTank::CalculateRotateInput(float Value)
 	float RotateAmount = Value * RotationSpeed * GetWorld()->DeltaTimeSeconds;
 	FRotator Rotation = FRotator(0, RotateAmount, 0);
 	RotationDirection = FQuat(Rotation);
+}
+
+void APawnTank::Fire()
+{
+	if(GetIsPlayerAlive()) Super::Fire();
 }
 
 void APawnTank::Move()

@@ -1,7 +1,7 @@
+#include "ProjectileBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "ProjectileBase.h"
 
 AProjectileBase::AProjectileBase()
 {
@@ -39,6 +39,7 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation());
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, DamageType);
 		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation(), FRotator(), 0.2f);
+		GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(HitShake);
 
 		Destroy();
 	}

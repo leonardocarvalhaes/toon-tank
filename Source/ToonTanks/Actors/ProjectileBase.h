@@ -5,6 +5,7 @@
 #include "ProjectileBase.generated.h"
 
 class UProjectileMovementComponent;
+class UCameraShake;
 
 UCLASS()
 class TOONTANKS_API AProjectileBase : public AActor
@@ -32,6 +33,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	UParticleSystem* HitParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	TSubclassOf<UCameraShake> HitShake;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* HitSound;

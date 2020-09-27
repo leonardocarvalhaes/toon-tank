@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 #include "TankGameModeBase.generated.h"
 
 class APawnTank;
@@ -9,11 +9,14 @@ class APawnTurret;
 class APlayerControllerBase;
 
 UCLASS()
-class TOONTANKS_API ATankGameModeBase : public AGameModeBase
+class TOONTANKS_API ATankGameModeBase : public AGameMode
 {
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Sound Track")
+	float SoundVolume = 1.f;
+
 	APawnTank* PlayerTank;
 	int32 TargetTurrets = 0;
 	APlayerControllerBase* PlayerControllerRef;
